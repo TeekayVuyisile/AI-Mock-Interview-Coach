@@ -1,0 +1,8 @@
+/* Minimal index.css */
+:root {
+  --primary-color: #0d6efd;
+}
+
+* {
+  box-sizing: border-box;
+}
