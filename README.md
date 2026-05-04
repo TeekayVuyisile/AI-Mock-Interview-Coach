@@ -75,4 +75,4 @@ Open [http://localhost:3000](http://localhost:3000) to start your mock interview
 - API keys are handled server-side to prevent exposure in the browser.
 
 ---
-Built with ❤️ for Recruiters & Developers.
+Author: Teekay Vuyisile Manale
