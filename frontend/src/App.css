@@ -6,7 +6,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f8f9fa;
+  
+  min-height: 100vh;
 }
 
 .App {
@@ -23,8 +24,247 @@ main {
   font-size: 1.5rem;
 }
 
-/* Custom button styles if needed */
-.btn-primary {
-  padding: 0.8rem 2rem;
+/* Enhanced Form Styles */
+.setup-card {
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 24px !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.setup-card:hover {
+  transform: translateY(-5px);
+}
+
+.form-label {
+  font-size: 0.875rem;
   font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #2d3748;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-control, .form-select {
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background-color: #ffffff;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  outline: none;
+}
+
+.form-control:hover:not(:focus), .form-select:hover:not(:focus) {
+  border-color: #cbd5e0;
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* File upload styling */
+.file-upload-wrapper {
+  position: relative;
+  border: 2px dashed #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #fafbfc;
+}
+
+.file-upload-wrapper:hover {
+  border-color: #667eea;
+  background-color: #f7fafc;
+}
+
+.file-upload-wrapper.drag-over {
+  border-color: #667eea;
+  background-color: #edf2f7;
+  transform: scale(0.98);
+}
+
+.file-input-hidden {
+  display: none;
+}
+
+.file-upload-icon {
+  font-size: 2rem;
+  color: #667eea;
+  margin-bottom: 0.5rem;
+}
+
+.file-upload-text {
+  font-size: 0.9rem;
+  color: #4a5568;
+}
+
+.file-upload-small {
+  font-size: 0.8rem;
+  color: #a0aec0;
+}
+
+.file-selected {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #edf2f7;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  margin-top: 0.5rem;
+}
+
+/* Button styling */
+.btn-start-interview {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 12px;
+  padding: 1rem;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-start-interview:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.btn-start-interview:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-start-interview:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Alert styling */
+.custom-alert {
+  border-radius: 12px;
+  border: none;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+/* Input group styling */
+.input-group-custom {
+  position: relative;
+}
+
+/* Card header styling */
+.card-header-custom {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
+  text-align: center;
+  color: white;
+}
+
+.card-header-custom h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.card-header-custom p {
+  margin: 0.5rem 0 0 0;
+  opacity: 0.9;
+  font-size: 0.9rem;
+}
+
+/* Step indicator */
+.step-indicator {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: #cbd5e0;
+  transition: color 0.3s ease;
+}
+
+.step-item.active {
+  color: #667eea;
+}
+
+.step-item.completed {
+  color: #48bb78;
+}
+
+.step-number {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: bold;
+}
+
+.step-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .setup-card {
+    margin: 1rem;
+    border-radius: 20px !important;
+  }
+  
+  .card-header-custom {
+    padding: 1.5rem;
+  }
+  
+  .card-header-custom h2 {
+    font-size: 1.5rem;
+  }
+  
+  .step-indicator {
+    gap: 1rem;
+  }
+  
+  .step-label {
+    font-size: 0.7rem;
+  }
+}
+
+/* Loading spinner animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.15em;
 }
