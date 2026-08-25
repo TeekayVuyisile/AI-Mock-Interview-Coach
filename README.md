@@ -1,6 +1,6 @@
 # AI Mock Interview Coach 🎙️🤖
 
-An AI-powered interview simulator that uses the **Gemini API** and **Web Speech API** to provide a realistic, voice-driven mock interview experience.
+An AI-powered interview simulator that uses the **Gemini API** and **Web Speech API** to provide a realistic, voice-driven mock interview experience to prepare for future job opportunities.
 
 ## 🌟 Key Features
 - **CV & Job Analysis:** Upload your CV (PDF/DOCX) and a job description. The AI tailors questions specifically for you.
