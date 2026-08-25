@@ -1,7 +1,47 @@
 import { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, ProgressBar, Spinner, Button, Accordion, Badge } from 'react-bootstrap';
 import { TrophyFill, ChatQuoteFill, LightbulbFill, ArrowRepeat } from 'react-bootstrap-icons';
-import { motion } from 'framer-motion';
+import { motion, animate } from 'framer-motion';
+
+const ScoreRing = ({ score }) => {
+  const radius = 68;
+  const circumference = 2 * Math.PI * radius;
+  const [display, setDisplay] = useState(0);
+
+  useEffect(() => {
+    const controls = animate(0, score, {
+      duration: 1.1,
+      ease: [0.16, 1, 0.3, 1],
+      onUpdate: (v) => setDisplay(Math.round(v)),
+    });
+    return () => controls.stop();
+  }, [score]);
+
+  return (
+    <div className="score-ring position-relative">
+      <svg viewBox="0 0 160 160" width="100%" height="100%">
+        <circle cx="80" cy="80" r={radius} fill="none" stroke="var(--ink-100)" strokeWidth="12" />
+        <motion.circle
+          cx="80"
+          cy="80"
+          r={radius}
+          fill="none"
+          stroke="var(--accent-600)"
+          strokeWidth="12"
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          initial={{ strokeDashoffset: circumference }}
+          animate={{ strokeDashoffset: circumference - (score / 100) * circumference }}
+          transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+          transform="rotate(-90 80 80)"
+        />
+      </svg>
+      <div className="position-absolute top-50 start-50 translate-middle text-center">
+        <div className="score-ring-value">{display}</div>
+      </div>
+    </div>
+  );
+};
 
 const ResultsPage = ({ results, interviewData, onRestart }) => {
   const [evaluation, setEvaluation] = useState(null);
@@ -37,9 +77,9 @@ const ResultsPage = ({ results, interviewData, onRestart }) => {
   if (loading) {
     return (
       <Container className="py-5 text-center">
-        <Spinner animation="grow" variant="primary" className="mb-4" />
-        <h2 className="fw-bold">Analyzing Your Performance...</h2>
-        <p className="text-muted">Gemini is reviewing your answers and preparing feedback.</p>
+        <Spinner animation="grow" variant="success" className="mb-4" />
+        <h2 className="fw-bold">Analyzing your performance...</h2>
+        <p className="text-muted-ink">Gemini is reviewing your answers and preparing feedback.</p>
       </Container>
     );
   }
@@ -47,9 +87,9 @@ const ResultsPage = ({ results, interviewData, onRestart }) => {
   if (error) {
     return (
       <Container className="py-5 text-center">
-        <h2 className="text-danger">Evaluation Error</h2>
-        <p>{error}</p>
-        <Button onClick={onRestart}>Try Again</Button>
+        <h2 className="text-danger">Evaluation error</h2>
+        <p className="text-muted-ink">{error}</p>
+        <Button className="btn-hero-primary border-0" onClick={onRestart}>Try Again</Button>
       </Container>
     );
   }
@@ -64,22 +104,18 @@ const ResultsPage = ({ results, interviewData, onRestart }) => {
         transition={{ duration: 0.5 }}
       >
         <div className="text-center mb-5">
-          <TrophyFill size={60} className="text-warning mb-3" />
-          <h1 className="display-4 fw-bold">Interview Results</h1>
-          <p className="lead text-muted">Great job completing the interview for {interviewData.jobTitle}!</p>
+          <TrophyFill size={44} color="#036b4c" className="mb-3" />
+          <h1 className="display-5 fw-bold">Interview Results</h1>
+          <p className="lead text-muted-ink">Great job completing the interview for {interviewData.jobTitle}</p>
         </div>
 
         <Row className="gy-4">
           {/* Overall Score Card */}
           <Col lg={4}>
-            <Card className="shadow-sm border-0 h-100 text-center p-4">
+            <Card className="score-ring-card border-0 h-100 text-center p-4">
               <h3 className="fw-bold mb-4">Overall Score</h3>
-              <div className="position-relative d-inline-block mx-auto mb-4">
-                <div style={{ width: '150px', height: '150px' }} className="d-flex align-items-center justify-content-center border border-primary border-5 rounded-circle">
-                  <h1 className="display-3 fw-bold mb-0 text-primary">{overallScore}</h1>
-                </div>
-              </div>
-              <p className="text-muted">Out of 100 points</p>
+              <ScoreRing score={overallScore} />
+              <p className="text-muted-ink mt-3">Out of 100 points</p>
               <hr />
               <div className="text-start">
                 {Object.entries(scores).map(([category, score]) => (
@@ -88,7 +124,7 @@ const ResultsPage = ({ results, interviewData, onRestart }) => {
                       <span className="text-capitalize fw-semibold">{category}</span>
                       <span className="fw-bold">{score}%</span>
                     </div>
-                    <ProgressBar now={score} variant="primary" style={{ height: '8px' }} />
+                    <ProgressBar now={score} variant="success" style={{ height: '6px', borderRadius: 'var(--radius-pill)' }} />
                   </div>
                 ))}
               </div>
@@ -99,9 +135,9 @@ const ResultsPage = ({ results, interviewData, onRestart }) => {
           <Col lg={8}>
             <Row className="gy-4">
               <Col md={6}>
-                <Card className="shadow-sm border-0 h-100 bg-success bg-opacity-10">
+                <Card className="result-panel result-panel-positive h-100 border-0">
                   <Card.Body className="p-4">
-                    <h4 className="fw-bold text-success mb-3"><ChatQuoteFill className="me-2" /> Key Strengths</h4>
+                    <h4 className="fw-bold mb-3" style={{ color: 'var(--accent-700)' }}><ChatQuoteFill className="me-2" /> Key Strengths</h4>
                     <ul className="mb-0">
                       {strengths.map((s, i) => <li key={i} className="mb-2 fw-medium">{s}</li>)}
                     </ul>
@@ -109,9 +145,9 @@ const ResultsPage = ({ results, interviewData, onRestart }) => {
                 </Card>
               </Col>
               <Col md={6}>
-                <Card className="shadow-sm border-0 h-100 bg-info bg-opacity-10">
+                <Card className="result-panel result-panel-neutral h-100 border-0">
                   <Card.Body className="p-4">
-                    <h4 className="fw-bold text-info mb-3"><LightbulbFill className="me-2" /> Areas to Improve</h4>
+                    <h4 className="fw-bold mb-3" style={{ color: 'var(--ink-800)' }}><LightbulbFill className="me-2" /> Areas to Improve</h4>
                     <ul className="mb-0">
                       {improvements.map((imp, i) => <li key={i} className="mb-2 fw-medium">{imp}</li>)}
                     </ul>
@@ -119,7 +155,7 @@ const ResultsPage = ({ results, interviewData, onRestart }) => {
                 </Card>
               </Col>
               <Col md={12}>
-                <Card className="shadow-sm border-0 p-4">
+                <Card className="result-panel border-0 p-4">
                   <h4 className="fw-bold mb-4">Detailed Question Analysis</h4>
                   <Accordion flush>
                     {results.map((item, index) => (
@@ -127,12 +163,12 @@ const ResultsPage = ({ results, interviewData, onRestart }) => {
                         <Accordion.Header>
                           <div className="d-flex flex-column">
                             <span className="fw-bold">Q{index + 1}: {item.question}</span>
-                            <small className="text-muted">Category: {item.category}</small>
+                            <small className="text-muted-ink">Category: {item.category}</small>
                           </div>
                         </Accordion.Header>
                         <Accordion.Body>
                           <p className="mb-2"><strong>Your Answer:</strong></p>
-                          <p className="text-dark p-3 bg-light rounded">{item.answer || "No answer recorded."}</p>
+                          <p className="p-3" style={{ background: 'var(--paper)', borderRadius: 'var(--radius-sm)', color: 'var(--ink-800)' }}>{item.answer || "No answer recorded."}</p>
                         </Accordion.Body>
                       </Accordion.Item>
                     ))}
@@ -143,19 +179,23 @@ const ResultsPage = ({ results, interviewData, onRestart }) => {
           </Col>
         </Row>
 
-        <div className="mt-5 p-4 border rounded bg-light">
+        <div className="mt-5 p-4 result-panel result-panel-neutral">
           <h4 className="fw-bold mb-3"><ArrowRepeat className="me-2" /> Suggested Questions to Practice Next</h4>
           <div className="d-flex flex-wrap gap-2">
             {suggestedQuestions.map((q, i) => (
-              <Badge key={i} bg="white" text="dark" className="border p-2 px-3 fw-medium">{q}</Badge>
+              <Badge key={i} bg="white" text="dark" className="border p-2 px-3 fw-medium" style={{ borderRadius: 'var(--radius-pill)' }}>{q}</Badge>
             ))}
           </div>
         </div>
 
         <div className="text-center mt-5">
-          <Button size="lg" variant="primary" className="px-5 py-3 fw-bold" onClick={onRestart}>
+          <motion.button
+            className="btn-hero-primary border-0 px-5 py-3"
+            whileTap={{ scale: 0.98 }}
+            onClick={onRestart}
+          >
             Take Another Interview
-          </Button>
+          </motion.button>
         </div>
       </motion.div>
     </Container>

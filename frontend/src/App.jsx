@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Container, Row, Col, Button, Modal } from 'react-bootstrap'
-import { MicFill, ShieldCheck, LightningChargeFill, InfoCircleFill } from 'react-bootstrap-icons'
+import { MicFill, ShieldCheck, LightningChargeFill, ArrowRight, Broadcast, Trophy } from 'react-bootstrap-icons'
 import { motion } from 'framer-motion'
 import SetupPage from './components/SetupPage'
 import InterviewPage from './components/InterviewPage'
@@ -34,102 +34,218 @@ function App() {
     setPage('landing')
   }
 
-  const renderLanding = () => (
-    <Container className="py-5 text-center">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        <h1 className="display-3 fw-bold mb-4">
-          Master Your Next Interview with <span className="text-primary">AI</span>
-        </h1>
-        <p className="lead mb-5 text-secondary">
-          Upload your CV, speak to our AI interviewer, and get real-time feedback to land your dream job.
-        </p>
-        <div className="d-flex justify-content-center gap-3">
-          <Button size="lg" variant="primary" onClick={() => setPage('setup')}>
-            Start Mock Interview
-          </Button>
-          <Button size="lg" variant="outline-dark" onClick={() => setShowHowItWorks(true)}>
-            How it works
-          </Button>
-        </div>
-      </motion.div>
+  const waveformBars = [10, 22, 14, 28, 18, 24, 12]
 
-      <Row className="mt-5 pt-5">
-        <Col md={4}>
-          <div className="p-4 border rounded shadow-sm h-100">
-            <LightningChargeFill size={40} className="text-warning mb-3" />
-            <h3>Real-time Voice</h3>
-            <p className="text-muted">Speak naturally. Our AI listens and responds just like a human recruiter.</p>
-          </div>
-        </Col>
-        <Col md={4}>
-          <div className="p-4 border rounded shadow-sm h-100">
-            <MicFill size={40} className="text-danger mb-3" />
-            <h3>Speech Analysis</h3>
-            <p className="text-muted">Get feedback on your confidence, clarity, and technical depth.</p>
-          </div>
-        </Col>
-        <Col md={4}>
-          <div className="p-4 border rounded shadow-sm h-100">
-            <ShieldCheck size={40} className="text-success mb-3" />
-            <h3>Privacy First</h3>
-            <p className="text-muted">Your CV and recordings are processed in-memory and never stored permanently.</p>
-          </div>
-        </Col>
-      </Row>
+  const renderLanding = () => (
+    <>
+      <Container className="hero-section">
+        <Row className="align-items-center gy-5">
+          <Col lg={6}>
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <h1 className="hero-heading">
+                Walk into your next interview <span className="accent-underline">already confident</span>
+              </h1>
+              <p className="hero-subtext">
+                Upload your CV, talk it out with a voice-driven AI interviewer, and get scored feedback built around the job you actually want.
+              </p>
+              <div className="d-flex flex-wrap gap-3">
+                <motion.button
+                  className="btn-hero-primary d-flex align-items-center gap-2 border-0"
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setPage('setup')}
+                >
+                  Start Mock Interview <ArrowRight size={16} />
+                </motion.button>
+                <button
+                  className="btn-hero-secondary"
+                  onClick={() => setShowHowItWorks(true)}
+                >
+                  How it works
+                </button>
+              </div>
+            </motion.div>
+          </Col>
+
+          <Col lg={6}>
+            <motion.div
+              className="hero-visual"
+              initial={{ opacity: 0, scale: 0.94 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="hero-visual-card">
+                <div className="hero-visual-top">
+                  <div className="hero-visual-orb">
+                    <MicFill size={22} color="#0c130f" />
+                  </div>
+                  <div className="hero-visual-waveform" aria-hidden="true">
+                    {waveformBars.map((h, i) => (
+                      <motion.span
+                        key={i}
+                        style={{ height: h, transformOrigin: 'bottom' }}
+                        animate={{ scaleY: [1, 1.8, 1] }}
+                        transition={{ repeat: Infinity, duration: 1.4, delay: i * 0.08, ease: 'easeInOut' }}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <p className="hero-visual-question">
+                  "Tell me about a time you shipped something under pressure."
+                </p>
+
+                <div className="hero-visual-footer">
+                  <span className="hero-visual-caption">Behavioral</span>
+                  <span className="hero-visual-caption">Question 3 of 10</span>
+                </div>
+              </div>
+
+              <motion.div
+                className="hero-floating-chip chip-score"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+              >
+                <Trophy size={16} color="#036b4c" /> Score 92
+              </motion.div>
+
+              <motion.div
+                className="hero-floating-chip chip-live"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.8 }}
+              >
+                <span className="chip-dot" /> Listening
+              </motion.div>
+            </motion.div>
+          </Col>
+        </Row>
+      </Container>
+
+      <Container className="feature-section">
+        <Row className="g-4">
+          <Col lg={6}>
+            <motion.div
+              className="feature-card feature-card-primary"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.5 }}
+            >
+              <span className="feature-card-primary-live"><span className="live-dot" /> Live session</span>
+
+              <div className="feature-card-primary-visual" aria-hidden="true">
+                <div className="feature-card-primary-orb">
+                  <MicFill size={22} color="#0c130f" />
+                </div>
+                <div className="feature-card-primary-waveform">
+                  {waveformBars.map((h, i) => (
+                    <motion.span
+                      key={i}
+                      style={{ height: h, transformOrigin: 'bottom' }}
+                      animate={{ scaleY: [1, 1.6, 1] }}
+                      transition={{ repeat: Infinity, duration: 1.2, delay: i * 0.09, ease: 'easeInOut' }}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h3>Real conversations, not multiple choice</h3>
+                <p>The AI asks, you answer out loud, and it follows up like a recruiter would. No scripts, no typing.</p>
+              </div>
+            </motion.div>
+          </Col>
+          <Col lg={6}>
+            <Row className="g-4 h-100">
+              <Col md={12}>
+                <motion.div
+                  className="feature-card"
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.4 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                >
+                  <div className="feature-icon-box">
+                    <LightningChargeFill size={18} />
+                  </div>
+                  <h3>Scored on what matters</h3>
+                  <p>Confidence, clarity, and technical depth, broken down per answer.</p>
+                </motion.div>
+              </Col>
+              <Col md={12}>
+                <motion.div
+                  className="feature-card"
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.4 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                >
+                  <div className="feature-icon-box">
+                    <ShieldCheck size={18} />
+                  </div>
+                  <h3>Nothing is kept</h3>
+                  <p>Your CV and recordings are processed in memory and discarded right after.</p>
+                </motion.div>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Container>
 
       <Modal show={showHowItWorks} onHide={() => setShowHowItWorks(false)} centered size="lg">
         <Modal.Header closeButton>
-          <Modal.Title className="fw-bold">How It Works</Modal.Title>
+          <Modal.Title className="fw-bold">How it works</Modal.Title>
         </Modal.Header>
         <Modal.Body className="p-4">
-          <Row className="gy-4 text-start">
+          <Row className="gy-4">
             <Col md={6}>
-              <div className="d-flex gap-3">
-                <div className="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px', flexShrink: 0 }}>1</div>
+              <div className="how-it-works-step">
+                <div className="how-it-works-number">1</div>
                 <div>
-                  <h5 className="fw-bold">Setup</h5>
-                  <p className="text-muted">Upload your CV and paste the job description. Our AI analyzes both to understand the role.</p>
+                  <h5>Setup</h5>
+                  <p>Upload your CV and paste the job description so the AI understands the role.</p>
                 </div>
               </div>
             </Col>
             <Col md={6}>
-              <div className="d-flex gap-3">
-                <div className="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px', flexShrink: 0 }}>2</div>
+              <div className="how-it-works-step">
+                <div className="how-it-works-number">2</div>
                 <div>
-                  <h5 className="fw-bold">Generation</h5>
-                  <p className="text-muted">Gemini generates unique, tailored interview questions specifically for your background.</p>
+                  <h5>Generation</h5>
+                  <p>Gemini writes questions tailored to your background and the target role.</p>
                 </div>
               </div>
             </Col>
             <Col md={6}>
-              <div className="d-flex gap-3">
-                <div className="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px', flexShrink: 0 }}>3</div>
+              <div className="how-it-works-step">
+                <div className="how-it-works-number">3</div>
                 <div>
-                  <h5 className="fw-bold">Voice Interview</h5>
-                  <p className="text-muted">The AI speaks questions. You reply using your mic. We show a live transcript of your answer.</p>
+                  <h5>Voice interview</h5>
+                  <p>The AI asks each question out loud. You answer with your mic, live transcript included.</p>
                 </div>
               </div>
             </Col>
             <Col md={6}>
-              <div className="d-flex gap-3">
-                <div className="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px', flexShrink: 0 }}>4</div>
+              <div className="how-it-works-step">
+                <div className="how-it-works-number">4</div>
                 <div>
-                  <h5 className="fw-bold">Feedback</h5>
-                  <p className="text-muted">Receive a detailed score, strengths, and areas to improve based on your actual responses.</p>
+                  <h5>Feedback</h5>
+                  <p>Get a score, strengths, and specific areas to improve based on your real answers.</p>
                 </div>
               </div>
             </Col>
           </Row>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={() => setShowHowItWorks(false)}>Got it!</Button>
+          <Button className="btn-hero-primary border-0" onClick={() => setShowHowItWorks(false)}>Got it</Button>
         </Modal.Footer>
       </Modal>
-    </Container>
+    </>
   )
 
   const renderContent = () => {
@@ -144,17 +260,17 @@ function App() {
         )
       case 'interview':
         return (
-          <InterviewPage 
-            interviewData={interviewData} 
-            onEndInterview={handleEndInterview} 
+          <InterviewPage
+            interviewData={interviewData}
+            onEndInterview={handleEndInterview}
           />
         )
       case 'results':
         return (
-          <ResultsPage 
-            results={results} 
-            interviewData={interviewData} 
-            onRestart={handleRestart} 
+          <ResultsPage
+            results={results}
+            interviewData={interviewData}
+            onRestart={handleRestart}
           />
         )
       default:
@@ -164,11 +280,17 @@ function App() {
 
   return (
     <div className="App">
-      <nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom py-3">
-        <Container>
-          <a className="navbar-brand fw-bold text-primary" href="/" onClick={(e) => { e.preventDefault(); handleRestart(); }}>
+      <nav className="site-navbar">
+        <Container className="d-flex align-items-center justify-content-between">
+          <a className="navbar-brand" href="/" onClick={(e) => { e.preventDefault(); handleRestart(); }}>
+            <span className="navbar-brand-mark"><Broadcast size={18} /></span>
             AI Interview Coach
           </a>
+          {page === 'landing' && (
+            <button className="btn-nav-cta" onClick={() => setPage('setup')}>
+              Start Interview
+            </button>
+          )}
         </Container>
       </nav>
 
@@ -176,9 +298,9 @@ function App() {
         {renderContent()}
       </main>
 
-      <footer className="py-5 bg-light mt-5 border-top">
+      <footer className="site-footer">
         <Container className="text-center">
-          <p className="text-muted mb-0">© 2026 AI Mock Interview Coach. Built for Recruiters & Developers.</p>
+          <p>&copy; 2026 AI Mock Interview Coach. Built for recruiters &amp; developers.</p>
         </Container>
       </footer>
     </div>

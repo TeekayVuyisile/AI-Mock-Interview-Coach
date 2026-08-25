@@ -1,8 +1,88 @@
-/* Minimal index.css */
+/* ---------------------------------------------------------------
+   Design tokens — AI Interview Coach
+   Single locked accent (emerald) over warm-ink neutrals.
+   Radius scale: sm=inputs/buttons, md=panels, lg=hero cards, pill=badges.
+--------------------------------------------------------------- */
 :root {
-  --primary-color: #0d6efd;
+  /* Neutrals (warm ink, not pure black/white) */
+  --ink-950: #12141a;
+  --ink-900: #1a1d25;
+  --ink-800: #262a35;
+  --ink-700: #3a3f4d;
+  --ink-600: #565c6d;
+  --ink-400: #8b91a1;
+  --ink-300: #b7bcc7;
+  --ink-200: #dcdfe5;
+  --ink-100: #edeff2;
+  --paper: #f7f6f3;
+  --surface: #ffffff;
+
+  /* Accent — locked, single brand color */
+  --accent-800: #023f2c;
+  --accent-700: #036b4c;
+  --accent-600: #047857;
+  --accent-500: #0e9668;
+  --accent-100: #d7f5e6;
+  --accent-50: #eefaf3;
+
+  /* Functional semantics only — never used as a second brand accent */
+  --danger: #d0342c;
+  --danger-100: #fbe4e2;
+  --warning: #b5750e;
+  --warning-100: #fbedd3;
+
+  /* Radius scale */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  /* Ink-tinted shadows */
+  --shadow-xs: 0 1px 2px rgba(18, 20, 26, 0.06);
+  --shadow-sm: 0 4px 12px rgba(18, 20, 26, 0.08);
+  --shadow-md: 0 16px 40px -12px rgba(18, 20, 26, 0.22);
+  --shadow-lg: 0 28px 70px -16px rgba(18, 20, 26, 0.32);
+
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  color-scheme: light;
+
+  /* ---- Bootstrap 5.3 theme variable overrides ---- */
+  --bs-body-font-family: var(--font-sans);
+  --bs-body-color: var(--ink-900);
+  --bs-body-bg: var(--paper);
+  --bs-border-radius: var(--radius-sm);
+  --bs-border-radius-lg: var(--radius-md);
+  --bs-border-color: var(--ink-200);
+
+  --bs-primary: var(--accent-600);
+  --bs-primary-rgb: 4, 120, 87;
+  --bs-link-color: var(--accent-600);
+  --bs-link-color-rgb: 4, 120, 87;
+  --bs-link-hover-color: var(--accent-700);
+  --bs-link-hover-color-rgb: 3, 107, 76;
+
+  --bs-success: var(--accent-600);
+  --bs-success-rgb: 4, 120, 87;
+  --bs-info: var(--ink-700);
+  --bs-info-rgb: 58, 63, 77;
+  --bs-warning: var(--warning);
+  --bs-warning-rgb: 181, 117, 14;
+  --bs-danger: var(--danger);
+  --bs-danger-rgb: 208, 52, 44;
+
+  --bs-dark: var(--ink-950);
+  --bs-dark-rgb: 18, 20, 26;
+  --bs-secondary: var(--ink-600);
+  --bs-secondary-rgb: 86, 92, 109;
 }
 
 * {
   box-sizing: border-box;
+}
+
+::selection {
+  background: var(--accent-100);
+  color: var(--accent-800);
 }

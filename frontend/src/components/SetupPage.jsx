@@ -1,7 +1,49 @@
 import { useState, useRef } from 'react';
 import { Form, Button, Card, Row, Col, Alert, Spinner } from 'react-bootstrap';
-import { Upload, FileText, Briefcase, PlayFill, Person, ChatDots, CheckCircle, XCircle, Star, Lightning, Fire, Suitcase, Code, People, Grid, LockFill } from 'react-bootstrap-icons';
+import { Upload, FileText, Briefcase, PlayFill, Person, ChatDots, XCircle, Star, Lightning, Fire, Suitcase, Code, People, Grid, LockFill } from 'react-bootstrap-icons';
 import { motion, AnimatePresence } from 'framer-motion';
+
+const DIFFICULTIES = [
+  { value: 'Easy', label: 'Easy', icon: Star },
+  { value: 'Medium', label: 'Medium', icon: Lightning },
+  { value: 'Hard', label: 'Hard', icon: Fire },
+];
+
+const INTERVIEW_TYPES = [
+  { value: 'HR', label: 'HR / Career', icon: Suitcase },
+  { value: 'Technical', label: 'Technical', icon: Code },
+  { value: 'Behavioral', label: 'Behavioral', icon: People },
+  { value: 'Mixed', label: 'Mixed', icon: Grid },
+];
+
+const SegmentedControl = ({ options, value, onChange, layoutId }) => (
+  <div className="segmented-control" role="radiogroup">
+    {options.map(({ value: optValue, label, icon: Icon }) => {
+      const isActive = value === optValue;
+      return (
+        <button
+          type="button"
+          key={optValue}
+          role="radio"
+          aria-checked={isActive}
+          className={`segmented-option${isActive ? ' is-active' : ''}`}
+          onClick={() => onChange(optValue)}
+        >
+          {isActive && (
+            <motion.span
+              layoutId={layoutId}
+              className="position-absolute top-0 start-0 w-100 h-100"
+              style={{ background: 'var(--ink-100)', borderRadius: 'var(--radius-sm)', zIndex: 0 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 32 }}
+            />
+          )}
+          <Icon size={14} style={{ position: 'relative', zIndex: 1 }} />
+          <span style={{ position: 'relative', zIndex: 1 }}>{label}</span>
+        </button>
+      );
+    })}
+  </div>
+);
 
 const SetupPage = ({ onStartInterview }) => {
   const [formData, setFormData] = useState({
@@ -20,6 +62,10 @@ const SetupPage = ({ onStartInterview }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const setField = (name) => (value) => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
@@ -108,20 +154,12 @@ const SetupPage = ({ onStartInterview }) => {
         <Col md={10} lg={8} xl={7}>
           <Card className="setup-card border-0">
             <div className="card-header-custom">
-              <motion.div
-                initial={{ scale: 0.9 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2 }}
-              >
-                <h2>
-                  <Star className="me-2" size={28} /> AI Interview Coach
-                </h2>
-                <p>Personalize your interview experience</p>
-              </motion.div>
+              <h2>Set up your interview</h2>
+              <p>A few details so the AI can tailor its questions to you</p>
             </div>
-            
+
             <Card.Body className="p-4 p-md-5">
-           
+
               <AnimatePresence>
                 {error && (
                   <motion.div
@@ -129,20 +167,20 @@ const SetupPage = ({ onStartInterview }) => {
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
                   >
-                    <Alert variant="danger" className="custom-alert">
+                    <Alert className="custom-alert">
                       <XCircle className="me-2" /> {error}
                     </Alert>
                   </motion.div>
                 )}
               </AnimatePresence>
-              
+
               <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-4">
                   <Form.Label className="form-label">
                     <Person className="me-2" size={14} /> Full Name (Optional)
                   </Form.Label>
-                  <Form.Control 
-                    type="text" 
+                  <Form.Control
+                    type="text"
                     name="fullName"
                     placeholder="e.g., John Doe"
                     value={formData.fullName}
@@ -155,7 +193,7 @@ const SetupPage = ({ onStartInterview }) => {
                   <Form.Label className="form-label">
                     <Upload className="me-2" size={14} /> Upload CV/Resume
                   </Form.Label>
-                  <div 
+                  <div
                     className={`file-upload-wrapper ${dragOver ? 'drag-over' : ''}`}
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
@@ -173,7 +211,7 @@ const SetupPage = ({ onStartInterview }) => {
                     {!cvFile ? (
                       <>
                         <div className="file-upload-icon">
-                          <Upload size={32} />
+                          <Upload size={20} />
                         </div>
                         <div className="file-upload-text">
                           Drag & drop your CV here or click to browse
@@ -185,9 +223,9 @@ const SetupPage = ({ onStartInterview }) => {
                     ) : (
                       <div className="file-selected">
                         <div className="d-flex align-items-center gap-2">
-                          <FileText className="text-success" size={20} />
+                          <FileText color="#036b4c" size={20} />
                           <span className="fw-semibold">{cvFile.name}</span>
-                          <small className="text-muted">
+                          <small className="text-muted-ink">
                             ({(cvFile.size / 1024).toFixed(1)} KB)
                           </small>
                         </div>
@@ -211,8 +249,8 @@ const SetupPage = ({ onStartInterview }) => {
                   <Form.Label className="form-label">
                     <Briefcase className="me-2" size={14} /> Job Title
                   </Form.Label>
-                  <Form.Control 
-                    type="text" 
+                  <Form.Control
+                    type="text"
                     name="jobTitle"
                     placeholder="e.g., Senior Frontend Developer"
                     value={formData.jobTitle}
@@ -226,8 +264,8 @@ const SetupPage = ({ onStartInterview }) => {
                   <Form.Label className="form-label">
                     <ChatDots className="me-2" size={14} /> Job Description
                   </Form.Label>
-                  <Form.Control 
-                    as="textarea" 
+                  <Form.Control
+                    as="textarea"
                     rows={4}
                     name="jobDescription"
                     placeholder="Paste the job requirements, responsibilities, and qualifications here..."
@@ -240,85 +278,64 @@ const SetupPage = ({ onStartInterview }) => {
 
                 <div className="border-top pt-4 mt-2 mb-4">
                   <h6 className="fw-bold mb-3">Interview Configuration</h6>
-                  <Row>
-                    <Col md={6}>
-                      <Form.Group className="mb-3">
-                        <Form.Label className="form-label">Number of Questions</Form.Label>
-                        <Form.Select 
-                          name="numQuestions"
-                          value={formData.numQuestions}
-                          onChange={handleInputChange}
-                          className="form-select"
-                        >
-                          {[5,6,7,8,9,10,11,12,13,14,15].map(num => (
-                            <option key={num} value={num}>{num} questions</option>
-                          ))}
-                        </Form.Select>
-                      </Form.Group>
-                    </Col>
-                    <Col md={6}>
-                      <Form.Group className="mb-3">
-                        <Form.Label className="form-label">Difficulty Level</Form.Label>
-                        <Form.Select 
-                          name="difficulty"
-                          value={formData.difficulty}
-                          onChange={handleInputChange}
-                          className="form-select"
-                        >
-                          <option value="Easy"><Star className="me-1" size={12} /> Easy - Foundational concepts</option>
-                          <option value="Medium"><Lightning className="me-1" size={12} /> Medium - Standard interview level</option>
-                          <option value="Hard"><Fire className="me-1" size={12} /> Hard - Advanced challenges</option>
-                        </Form.Select>
-                      </Form.Group>
-                    </Col>
-                  </Row>
 
-                  <Form.Group className="mb-3">
-                    <Form.Label className="form-label">Interview Type</Form.Label>
-                    <Form.Select 
-                      name="interviewType"
-                      value={formData.interviewType}
+                  <Form.Group className="mb-4">
+                    <Form.Label className="form-label">Number of Questions</Form.Label>
+                    <Form.Select
+                      name="numQuestions"
+                      value={formData.numQuestions}
                       onChange={handleInputChange}
                       className="form-select"
                     >
-                      <option value="HR"><Suitcase className="me-1" size={12} /> HR / Career - Culture & experience</option>
-                      <option value="Technical"><Code className="me-1" size={12} /> Technical - Skills & problem-solving</option>
-                      <option value="Behavioral"><People className="me-1" size={12} /> Behavioral - Soft skills & scenarios</option>
-                      <option value="Mixed"><Grid className="me-1" size={12} /> Mixed - Comprehensive assessment</option>
+                      {[5,6,7,8,9,10,11,12,13,14,15].map(num => (
+                        <option key={num} value={num}>{num} questions</option>
+                      ))}
                     </Form.Select>
+                  </Form.Group>
+
+                  <Form.Group className="mb-4">
+                    <Form.Label className="form-label">Difficulty Level</Form.Label>
+                    <SegmentedControl
+                      options={DIFFICULTIES}
+                      value={formData.difficulty}
+                      onChange={setField('difficulty')}
+                      layoutId="difficulty-highlight"
+                    />
+                  </Form.Group>
+
+                  <Form.Group className="mb-3">
+                    <Form.Label className="form-label">Interview Type</Form.Label>
+                    <SegmentedControl
+                      options={INTERVIEW_TYPES}
+                      value={formData.interviewType}
+                      onChange={setField('interviewType')}
+                      layoutId="type-highlight"
+                    />
                   </Form.Group>
                 </div>
 
-                <Button 
-                  variant="primary" 
-                  type="submit" 
-                  className="btn-start-interview w-100 d-flex align-items-center justify-content-center gap-2"
+                <motion.button
+                  type="submit"
+                  className="btn-start-interview w-100 d-flex align-items-center justify-content-center gap-2 border-0 text-white"
                   disabled={loading}
+                  whileTap={{ scale: loading ? 1 : 0.98 }}
                 >
                   {loading ? (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="d-flex align-items-center gap-2"
-                    >
+                    <>
                       <Spinner animation="border" size="sm" />
-                      <span>Preparing Your Interview...</span>
-                    </motion.div>
+                      <span>Preparing your interview...</span>
+                    </>
                   ) : (
-                    <motion.div
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="d-flex align-items-center gap-2"
-                    >
+                    <>
                       <PlayFill size={20} />
                       <span>Start Interview</span>
-                    </motion.div>
+                    </>
                   )}
-                </Button>
+                </motion.button>
 
                 <div className="text-center mt-4">
-                  <small className="text-muted">
-                    <LockFill className="me-1" size={12} /> Your data is secure and will only be used for this interview session
+                  <small className="text-muted-ink">
+                    <LockFill className="me-1" size={12} /> Your data is secure and only used for this interview session
                   </small>
                 </div>
               </Form>
