@@ -1,6 +1,7 @@
 # AI Mock Interview Coach
 
 An AI-powered interview simulator that uses the **Google Gemini API** and the **Web Speech API** to run a realistic, voice-driven mock interview. Upload your CV and a job description, answer tailored questions out loud, and get a scored evaluation of your performance.
+An AI-powered interview simulator that uses the **Gemini API** and **Web Speech API** to provide a realistic, voice-driven mock interview experience to prepare for future job opportunities.
 
 ![Landing page](docs/screenshots/landing.png)
 
